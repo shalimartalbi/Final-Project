@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneSignal — SaaS Spend Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     SHARED SIDEBAR
+     ══════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <img src="assets/logo-one-signal.svg" alt="OneSignal">
+    </div>
+    <span class="brand-name">OneSignal</span>
+  </div>
+
+  <nav class="nav-top">
+    <!-- data-view drives JS switching; active class set by JS -->
+    <button class="nav-item white-bg" data-view="overview">
+      <span class="nav-icon">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+          <path d="M2 9L9 2.5L16 9V16H11.5V12H6.5V16H2V9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
+      Overview
+    </button>
+
+    <button class="nav-item white-bg" data-view="email">
+      <span class="nav-icon">
+        <svg width="17" height="13" viewBox="0 0 20 15" fill="none">
+          <rect x="1" y="1" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M1 4L10 9L19 4" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </span>
+      Email
+    </button>
+
+    <button class="nav-item white-bg" data-view="calendar">
+      <span class="nav-icon">
+        <svg width="15" height="16" viewBox="0 0 17 18" fill="none">
+          <rect x="1" y="3" width="15" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M1 7.5H16" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M5 1.5V4.5M12 1.5V4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="4" y="10" width="2" height="2" rx="0.5" fill="currentColor"/>
+          <rect x="7.5" y="10" width="2" height="2" rx="0.5" fill="currentColor"/>
+          <rect x="11" y="10" width="2" height="2" rx="0.5" fill="currentColor"/>
+        </svg>
+      </span>
+      Calendar
+    </button>
+
+    <button class="nav-item white-bg" onclick="openModal('tool-modal')">
+      <span class="nav-icon">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="7.5" stroke="#374151" stroke-width="1.5" fill="none"/>
+          <path d="M9 5.5V12.5M5.5 9H12.5" stroke="#374151" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      Connect new tool
+    </button>
+  </nav>
+
+  <nav class="nav-bottom">
+    <button class="nav-item muted" onclick="openSettings()">
+      <span class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 19 19" fill="none">
+          <circle cx="9.5" cy="9.5" r="2.5" stroke="#6b7280" stroke-width="1.4" fill="none"/>
+          <path d="M9.5 1.5V3M9.5 16V17.5M1.5 9.5H3M16 9.5H17.5M3.6 3.6L4.7 4.7M14.3 14.3L15.4 15.4M15.4 3.6L14.3 4.7M4.7 14.3L3.6 15.4" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </span>
+      Settings
+    </button>
+    <button class="nav-item muted" onclick="openModal('logout-modal')">
+      <span class="nav-icon">
+        <svg width="16" height="15" viewBox="0 0 18 17" fill="none">
+          <path d="M7 2H3C2.45 2 2 2.45 2 3V14C2 14.55 2.45 15 3 15H7" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 5L16 8.5L12 12" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M16 8.5H7" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      Logout
+    </button>
+  </nav>
+</aside>
+
+<!-- ══════════════════════════════════════════════════════
+     VIEW 1: OVERVIEW
+     ══════════════════════════════════════════════════════ -->
+<div id="overview-view" class="view-panel">
+  <main class="main" style="margin-left:258px;">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-date">Monday, Mar 9, 2026</span>
+        <h1 class="topbar-title">Overview</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5.5" stroke="#9da4b1" stroke-width="1.5"/>
+            <path d="M11 11L14 14" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="text" class="search-input" id="ov-search" placeholder="Search...">
+        </div>
+        <button class="icon-btn">
+          <svg width="18" height="19" viewBox="0 0 20 21" fill="none">
+            <path d="M10 2C7.24 2 5 4.24 5 7V12.5L3 14.5V15H17V14.5L15 12.5V7C15 4.24 12.76 2 10 2Z" stroke="#374151" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+            <path d="M8 17C8 18.1 8.9 19 10 19C11.1 19 12 18.1 12 17" stroke="#374151" stroke-width="1.5" fill="none"/>
+            <circle cx="15.5" cy="4.5" r="2.8" fill="#ef4444"/>
+          </svg>
+        </button>
+        <div class="user-chip">
+          <div class="user-avatar">ST</div>
+          <svg width="9" height="5" viewBox="0 0 10 6" fill="none">
+            <path d="M1 1L5 5L9 1" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODAY ROW -->
+    <div class="today-row">
+      <span class="today-label">Today</span>
+      <div class="today-badges">
+        <button class="today-badge" id="badge-email" data-section="email">5 unread emails</button>
+        <button class="today-badge" id="badge-meetings" data-section="calendar">5 meetings</button>
+      </div>
+    </div>
+
+    <!-- SECTION CARDS -->
+    <div class="cards-stack">
+
+      <!-- Calendar card -->
+      <div class="section-card" id="ov-section-calendar">
+        <div class="card-header">
+          <div class="card-icon">
+            <img src="assets/calendar-icon.svg" class="cal-ico" alt="">
+          </div>
+          <span class="card-title">Calendar</span>
+        </div>
+
+        <div class="item-rows">
+          <div class="item-row" onclick="openCalendarItem('e1')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">09:30 AM</span>
+              <span class="item-name">Product Sync</span>
+            </div>
+            <a href="#" class="action-badge badge-purple" onclick="event.stopPropagation();openCalendarItem('e1')">
+              Join with Google Teams
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#4a3ac8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openCalendarItem('e2')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">10:30 AM</span>
+              <span class="item-name">StartUp</span>
+            </div>
+            <a href="#" class="action-badge badge-blue" onclick="event.stopPropagation();openCalendarItem('e2')">
+              Join with Zoom
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#2e8cff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openCalendarItem('e3')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">11:30 AM</span>
+              <span class="item-name">1:1 Manager</span>
+            </div>
+            <a href="#" class="action-badge badge-orange" onclick="event.stopPropagation();openCalendarItem('e3')">
+              Room 268
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#ff9e2e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openCalendarItem('e5')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">02:00 PM</span>
+              <span class="item-name">Cross-team discussion</span>
+            </div>
+            <a href="#" class="action-badge badge-blue" onclick="event.stopPropagation();openCalendarItem('e5')">
+              Join with Zoom
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#2e8cff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openCalendarItem('e4')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">04:30 PM</span>
+              <span class="item-name">Sprint planning</span>
+            </div>
+            <a href="#" class="action-badge badge-green" onclick="event.stopPropagation();openCalendarItem('e4')">
+              Join with Google Meet
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#348a27" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email card -->
+      <div class="section-card" id="ov-section-email">
+        <div class="card-header">
+          <div class="card-icon">
+            <img src="assets/email-icon.svg" class="eml-ico" alt="">
+          </div>
+          <span class="card-title">Email</span>
+        </div>
+
+        <div class="item-rows">
+          <div class="item-row" onclick="openEmailItem('Contract Draft Review')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">Mar 9</span>
+              <span class="item-name">Contract Draft Review<span class="item-sender">Sarah Johnson</span></span>
+            </div>
+            <a href="#" class="action-badge badge-blue" onclick="event.stopPropagation();openEmailItem('Contract Draft Review')">
+              View with Outlook
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#2e8cff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openEmailItem('Finance Report Ready')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">Mar 9</span>
+              <span class="item-name">Finance Report Ready<span class="item-sender">Finance Tech</span></span>
+            </div>
+            <a href="#" class="action-badge badge-red" onclick="event.stopPropagation();openEmailItem('Finance Report Ready')">
+              View with Gmail
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#a26060" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openEmailItem('Design Feedback Request')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">Mar 9</span>
+              <span class="item-name">Design Feedback Request<span class="item-sender">Lena Park</span></span>
+            </div>
+            <a href="#" class="action-badge badge-red" onclick="event.stopPropagation();openEmailItem('Design Feedback Request')">
+              View with Gmail
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#a26060" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openEmailItem('Client Instruction')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">Mar 9</span>
+              <span class="item-name">Client Instruction<span class="item-sender">Marcus Weiss</span></span>
+            </div>
+            <a href="#" class="action-badge badge-blue" onclick="event.stopPropagation();openEmailItem('Client Instruction')">
+              View with Outlook
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#2e8cff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="item-row" onclick="openEmailItem('Hiring Update')" style="cursor:pointer;">
+            <div class="item-left">
+              <span class="item-time">Mar 8</span>
+              <span class="item-name">Hiring Update<span class="item-sender">HR Department</span></span>
+            </div>
+            <a href="#" class="action-badge badge-purple" onclick="event.stopPropagation();openEmailItem('Hiring Update')">
+              View with Yahoo
+              <svg class="ext-icon" viewBox="0 0 10 10" fill="none">
+                <path d="M2 8L8 2M8 2H4M8 2V6" stroke="#4a3ac8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.cards-stack -->
+  </main>
+</div><!-- /#overview-view -->
+
+
+<!-- ══════════════════════════════════════════════════════
+     VIEW 2: EMAIL
+     ══════════════════════════════════════════════════════ -->
+<div id="email-view" class="view-panel">
+  <div class="em-layout" style="margin-left:258px; flex:1; display:flex; min-height:100vh;">
+
+    <!-- EMAIL LIST PANEL -->
+    <div class="email-list-panel">
+      <div class="list-header">
+        <div class="list-header-top">
+          <div class="list-title-area">
+            <span class="list-date">Monday, Mar 9, 2026</span>
+            <div class="list-title-row">
+              <h1 class="list-title">Email</h1>
+              <div class="app-icon-group">
+                <div class="app-icon"><img src="assets/gmail-logo.svg" alt="Gmail"></div>
+                <div class="app-icon"><img src="assets/outlook-logo.svg" alt="Outlook"></div>
+                <div class="app-icon"><img src="assets/yahoo-logo.svg" alt="Yahoo"></div>
+              </div>
+              <span id="email-tool-badge" class="tool-count-badge">+0</span>
+            </div>
+          </div>
+          <button class="plus-btn" onclick="openModal('compose-modal')">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+              <path d="M7 2V12M2 7H12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="ftab active">All</button>
+          <button class="ftab">Unread</button>
+          <button class="ftab">Important</button>
+          <button class="ftab">Sent</button>
+          <button class="ftab">Archive</button>
+        </div>
+      </div>
+
+      <!-- Unread -->
+      <div class="email-row selected" onclick="selectEmail(this)" data-important="true">
+        <div class="status-dot unread"></div>
+        <div class="email-avatar" style="background:#2e8cff;">SJ</div>
+        <div class="email-meta">
+          <div class="email-sender">Sarah Johnson <span class="important-star">★</span></div>
+          <div class="email-subject">Contract Draft Review</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot unread"></div>
+        <div class="email-avatar" style="background:#d03438;">FT</div>
+        <div class="email-meta">
+          <div class="email-sender">Finance Tech</div>
+          <div class="email-subject">Finance Report Ready</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot unread"></div>
+        <div class="email-avatar" style="background:#d03438;">LP</div>
+        <div class="email-meta">
+          <div class="email-sender">Lena Park</div>
+          <div class="email-subject">Design Feedback Request</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot unread"></div>
+        <div class="email-avatar" style="background:#2e8cff;">MW</div>
+        <div class="email-meta">
+          <div class="email-sender">Marcus Weiss</div>
+          <div class="email-subject">Client Instruction</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot unread"></div>
+        <div class="email-avatar" style="background:#4a3ac8;">HD</div>
+        <div class="email-meta">
+          <div class="email-sender">HR Department</div>
+          <div class="email-subject">Hiring Update</div>
+        </div>
+      </div>
+
+      <!-- Read -->
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot"></div>
+        <div class="email-avatar" style="background:#d03438;">IP</div>
+        <div class="email-meta">
+          <div class="email-sender">Isabelle Phillips</div>
+          <div class="email-subject">Mar 10 Meeting Cancelled</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot"></div>
+        <div class="email-avatar" style="background:#2e8cff;">O</div>
+        <div class="email-meta">
+          <div class="email-sender">Outlook</div>
+          <div class="email-subject">Security Alert</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot"></div>
+        <div class="email-avatar" style="background:#2e8cff;">F</div>
+        <div class="email-meta">
+          <div class="email-sender">Figma</div>
+          <div class="email-subject">28 new comments</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot"></div>
+        <div class="email-avatar" style="background:#d03438;">DA</div>
+        <div class="email-meta">
+          <div class="email-sender">Daisy Adams</div>
+          <div class="email-subject">Meeting Follow-Up</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot"></div>
+        <div class="email-avatar" style="background:#2e8cff;">JM</div>
+        <div class="email-meta">
+          <div class="email-sender">Jade Moyet</div>
+          <div class="email-subject">RE: Sony Project</div>
+        </div>
+      </div>
+
+      <div class="email-row" onclick="selectEmail(this)">
+        <div class="status-dot"></div>
+        <div class="email-avatar" style="background:#d03438;">MZ</div>
+        <div class="email-meta">
+          <div class="email-sender">Minyan Zhang</div>
+          <div class="email-subject">Summer Unveiling</div>
+        </div>
+      </div>
+    </div><!-- /.email-list-panel -->
+
+    <!-- DETAIL PANEL -->
+    <div class="detail-panel">
+
+      <!-- Topbar right (email view only) -->
+      <div class="em-topbar-right">
+        <div class="search-box" style="background:#f9fafb;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5.5" stroke="#9da4b1" stroke-width="1.5"/>
+            <path d="M11 11L14 14" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="text" class="search-input" id="em-search" placeholder="Search...">
+        </div>
+        <button class="icon-btn">
+          <svg width="18" height="19" viewBox="0 0 20 21" fill="none">
+            <path d="M10 2C7.24 2 5 4.24 5 7V12.5L3 14.5V15H17V14.5L15 12.5V7C15 4.24 12.76 2 10 2Z" stroke="#374151" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+            <path d="M8 17C8 18.1 8.9 19 10 19C11.1 19 12 18.1 12 17" stroke="#374151" stroke-width="1.5" fill="none"/>
+            <circle cx="15.5" cy="4.5" r="2.8" fill="#ef4444"/>
+          </svg>
+        </button>
+        <div class="user-chip">
+          <div class="user-avatar">ST</div>
+          <svg width="9" height="5" viewBox="0 0 10 6" fill="none">
+            <path d="M1 1L5 5L9 1" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="detail-content">
+
+        <div class="sender-header">
+          <div class="sender-avatar">SJ</div>
+          <div>
+            <div class="sender-info-name">Sarah Johnson</div>
+            <div class="sender-info-email">sarahjohnson@oracle.com</div>
+          </div>
+        </div>
+
+        <div class="email-body-section">
+          <div class="email-subject-row">
+            <div class="email-subject-text">Contract Draft Review</div>
+            <div class="email-actions">
+              <button class="action-icon" id="flag-btn" onclick="toggleFlag(this)" title="Flag">
+                <svg width="15" height="16" viewBox="0 0 17 18" fill="none">
+                  <path d="M3 1.5V16.5" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M3 2.5L14 2.5L10 7.5L14 12.5L3 12.5" stroke="#9da4b1" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </button>
+              <button class="action-icon" onclick="toggleActionMenu(event, this)">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                  <rect x="1" y="4" width="16" height="12" rx="2" stroke="#9da4b1" stroke-width="1.5" fill="none"/>
+                  <rect x="1" y="1" width="16" height="4" rx="1" stroke="#9da4b1" stroke-width="1.5" fill="none"/>
+                  <path d="M7 9.5H11" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <span class="email-time">3:21 PM</span>
+            </div>
+          </div>
+
+          <div class="email-body-text">
+            <p>Hi Shalimar,</p>
+            <p>I've attached the latest draft of the contract for review.</p>
+            <p>Best,</p>
+            <p>Sarah</p>
+          </div>
+
+          <div class="attachment">
+            <img src="assets/acrobat-logo.svg" class="pdf-icon" alt="PDF">
+            <div class="attachment-info">
+              <div class="attachment-name">Contract Sony Final</div>
+              <div class="attachment-type">PDF</div>
+            </div>
+            <button class="download-btn" onclick="fakeDownload('Contract Sony Final.pdf')" title="Download">
+              <svg width="16" height="18" viewBox="0 0 18 22" fill="none">
+                <path d="M9 1V15M9 15L4 10M9 15L14 10" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M1 18H17" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="conversation-thread" class="conversation-thread"></div>
+
+        <div class="compose-box">
+          <!-- Forward mode header — shown only when forwarding -->
+          <div class="forward-header" id="forward-header">
+            <div class="forward-header-bar">
+              <span class="forward-badge">FWD</span>
+              <span class="fwd-subject-display" id="fwd-subject-display"></span>
+              <button class="fwd-cancel-btn" onclick="exitForwardMode()" title="Cancel forward">✕</button>
+            </div>
+            <div class="forward-to-row">
+              <span class="forward-to-label">To</span>
+              <input type="email" class="forward-to-input" id="fwd-to" placeholder="recipient@example.com">
+            </div>
+          </div>
+
+          <div contenteditable="true" class="compose-textarea" id="compose-area" data-ph="Type your reply here..."></div>
+          <div class="compose-toolbar">
+            <div class="toolbar-left">
+              <div class="toolbar-item" id="font-family-btn" onclick="toggleToolbarDropdown('font-family-dd', event)">
+                <span id="font-family-label">Inter</span>
+                <svg width="6" height="4" viewBox="0 0 6 4" fill="none">
+                  <path d="M0.5 0.5L3 3L5.5 0.5" stroke="#374151" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+                <div class="toolbar-dropdown" id="font-family-dd">
+                  <div class="toolbar-dd-item selected" onclick="setFontFamily('Inter', this)">Inter</div>
+                  <div class="toolbar-dd-item" onclick="setFontFamily('Georgia', this)">Georgia</div>
+                  <div class="toolbar-dd-item" onclick="setFontFamily('Courier New', this)">Courier New</div>
+                  <div class="toolbar-dd-item" onclick="setFontFamily('Arial', this)">Arial</div>
+                  <div class="toolbar-dd-item" onclick="setFontFamily('Verdana', this)">Verdana</div>
+                </div>
+              </div>
+              <div class="toolbar-item" id="font-size-btn" onclick="toggleToolbarDropdown('font-size-dd', event)">
+                <span id="font-size-label">14px</span>
+                <svg width="6" height="4" viewBox="0 0 6 4" fill="none">
+                  <path d="M0.5 0.5L3 3L5.5 0.5" stroke="#374151" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+                <div class="toolbar-dropdown" id="font-size-dd">
+                  <div class="toolbar-dd-item" onclick="setFontSize('11px', this)">11px</div>
+                  <div class="toolbar-dd-item" onclick="setFontSize('12px', this)">12px</div>
+                  <div class="toolbar-dd-item selected" onclick="setFontSize('14px', this)">14px</div>
+                  <div class="toolbar-dd-item" onclick="setFontSize('16px', this)">16px</div>
+                  <div class="toolbar-dd-item" onclick="setFontSize('18px', this)">18px</div>
+                  <div class="toolbar-dd-item" onclick="setFontSize('20px', this)">20px</div>
+                  <div class="toolbar-dd-item" onclick="setFontSize('24px', this)">24px</div>
+                </div>
+              </div>
+              <div class="color-dot"></div>
+              <button class="toolbar-btn" id="fmt-bold" onmousedown="event.preventDefault()" onclick="execFormat('bold')" title="Bold">B</button>
+              <button class="toolbar-btn italic" id="fmt-italic" onmousedown="event.preventDefault()" onclick="execFormat('italic')" title="Italic">I</button>
+              <button class="toolbar-btn underline" id="fmt-underline" onmousedown="event.preventDefault()" onclick="execFormat('underline')" title="Underline">U</button>
+              <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="execFormat('justifyLeft')" title="Align left">
+                <svg width="15" height="12" viewBox="0 0 18 13" fill="none">
+                  <path d="M1 1.5H17M1 5.5H13M1 9.5H17M1 13H13" stroke="#9da4b1" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="execFormat('justifyCenter')" title="Align center">
+                <svg width="15" height="12" viewBox="0 0 18 13" fill="none">
+                  <path d="M1 1.5H17M3 5.5H15M1 9.5H17M3 13H15" stroke="#9da4b1" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="execFormat('justifyRight')" title="Align right">
+                <svg width="15" height="12" viewBox="0 0 18 13" fill="none">
+                  <path d="M1 1.5H17M5 5.5H17M1 9.5H17M5 13H17" stroke="#9da4b1" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <button class="send-btn" onclick="sendEmail()">
+              Send
+              <svg width="15" height="13" viewBox="0 0 18 16" fill="none">
+                <path d="M1 8H16M16 8L10 2M16 8L10 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /.detail-content -->
+    </div><!-- /.detail-panel -->
+
+  </div><!-- /.em-layout -->
+</div><!-- /#email-view -->
+
+
+<!-- ══════════════════════════════════════════════════════
+     VIEW 3: CALENDAR
+     ══════════════════════════════════════════════════════ -->
+<div id="calendar-view" class="view-panel">
+  <div class="cal-main" style="margin-left:258px; flex:1; padding:32px 20px 32px 22px; overflow-y:auto; min-width:0;">
+
+    <!-- TOP BAR -->
+    <div class="cal-topbar">
+      <div class="cal-topbar-left">
+        <span class="cal-topbar-date">Monday, Mar 9, 2026</span>
+        <div class="cal-title-row">
+          <h1 class="cal-topbar-title">Calendar</h1>
+          <div class="avatar-mini-group">
+            <div class="avatar-mini" style="background:#fff; border-color:#e5e7eb;">
+              <img src="assets/google-meet-logo.svg" width="13" height="13" alt="Google Meet">
+            </div>
+            <div class="avatar-mini" style="background:#fff; border-color:#e5e7eb;">
+              <img src="assets/google-teams-logo.svg" width="13" height="13" alt="Google Teams">
+            </div>
+            <div class="avatar-mini" style="background:#fff; border-color:#e5e7eb;">
+              <img src="assets/zoom-logo.svg" width="13" height="13" alt="Zoom">
+            </div>
+          </div>
+          <span id="cal-tool-badge" class="tool-count-badge">+0</span>
+        </div>
+      </div>
+
+      <div class="cal-topbar-right">
+        <div class="search-box">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5.5" stroke="#9da4b1" stroke-width="1.5"/>
+            <path d="M11 11L14 14" stroke="#9da4b1" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="text" class="search-input" id="cal-search" placeholder="Search...">
+        </div>
+        <button class="icon-btn">
+          <svg width="18" height="19" viewBox="0 0 20 21" fill="none">
+            <path d="M10 2C7.24 2 5 4.24 5 7V12.5L3 14.5V15H17V14.5L15 12.5V7C15 4.24 12.76 2 10 2Z" stroke="#374151" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+            <path d="M8 17C8 18.1 8.9 19 10 19C11.1 19 12 18.1 12 17" stroke="#374151" stroke-width="1.5" fill="none"/>
+            <circle cx="15.5" cy="4.5" r="2.8" fill="#ef4444"/>
+          </svg>
+        </button>
+        <div class="user-chip">
+          <div class="cal-user-avatar">ST</div>
+          <svg width="9" height="5" viewBox="0 0 10 6" fill="none">
+            <path d="M1 1L5 5L9 1" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="today">Today</button>
+      <button class="filter-btn" data-filter="last7">Last 7 days</button>
+      <button class="filter-btn" data-filter="custom">Custom</button>
+    </div>
+
+    <!-- MEETING CARDS -->
+    <div class="cards-row">
+
+      <!-- Create New -->
+      <div class="card card-create">
+        <button class="create-new-btn" onclick="openModal('meeting-modal')">
+          Create New
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="7.5" stroke="#253471" stroke-width="1.5" fill="none"/>
+            <path d="M9 5.5V12.5M5.5 9H12.5" stroke="#253471" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Product Sync – Google Teams -->
+      <div class="card card-meeting">
+        <div class="meeting-top">
+          <div>
+            <div class="meeting-title">Product Sync</div>
+            <div class="meeting-sub">Live now</div>
+          </div>
+          <span class="pill pill-teams">Google Teams</span>
+        </div>
+        <div class="meeting-bottom">
+          <div class="av-stack">
+            <div class="av" style="background:#2e8cff;">IS</div>
+            <div class="av" style="background:#a26060;">MD</div>
+            <div class="av" style="background:#4a3ac8;">AA</div>
+          </div>
+          <div class="guest-row">
+            8 Guests
+            <div class="yes-check">
+              3 Yes
+              <div class="check-dot">
+                <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
+                  <path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="join-btn" onclick="joinMeeting('Google Teams')">Join Meeting</button>
+      </div>
+
+      <!-- Product Sync – Zoom -->
+      <div class="card card-meeting">
+        <div class="meeting-top">
+          <div>
+            <div class="meeting-title">Product Sync</div>
+            <div class="meeting-sub">Live now</div>
+          </div>
+          <span class="pill pill-zoom">Zoom</span>
+        </div>
+        <div class="meeting-bottom">
+          <div class="av-stack">
+            <div class="av" style="background:#f97316;">SR</div>
+            <div class="av" style="background:#06b6d4;">IL</div>
+            <div class="av" style="background:#8b5cf6;">HX</div>
+            <div class="av" style="background:#ec4899;">YP</div>
+          </div>
+          <div class="guest-row">
+            4 Guests
+            <div class="yes-check">
+              2 Yes
+              <div class="check-dot">
+                <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
+                  <path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="join-btn" onclick="joinMeeting('Zoom')">Join Meeting</button>
+      </div>
+
+    </div><!-- /.cards-row -->
+
+    <!-- CALENDAR GRID -->
+    <div class="calendar-wrap" id="calendarWrap">
+      <div class="cal-grid-scroll">
+
+        <!-- Header row -->
+        <div class="cal-header" id="cal-header">
+          <div class="cal-corner">
+            <button class="nav-arrow" id="cal-prev">
+              <svg width="6" height="10" viewBox="0 0 7 12" fill="none">
+                <path d="M6 1L1 6L6 11" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="nav-arrow" id="cal-next">
+              <svg width="6" height="10" viewBox="0 0 7 12" fill="none">
+                <path d="M1 1L6 6L1 11" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <!-- 7 day headers — JS shows only 4 at a time -->
+          <div class="cal-day-header">MAR 09, MON</div>
+          <div class="cal-day-header">MAR 10, TUE</div>
+          <div class="cal-day-header">MAR 11, WED</div>
+          <div class="cal-day-header">MAR 12, THU</div>
+          <div class="cal-day-header">MAR 13, FRI</div>
+          <div class="cal-day-header">MAR 14, SAT</div>
+          <div class="cal-day-header">MAR 15, SUN</div>
+        </div>
+
+        <!-- Scrollable body -->
+        <div class="cal-body" id="cal-body">
+
+            <!-- Time column: 13 rows × 122px = 1586px (8AM–8PM) -->
+            <div class="time-col">
+              <div class="time-cell">08:00 AM</div>
+              <div class="time-cell">09:00 AM</div>
+              <div class="time-cell">10:00 AM</div>
+              <div class="time-cell">11:00 AM</div>
+              <div class="time-cell">12:00 PM</div>
+              <div class="time-cell">01:00 PM</div>
+              <div class="time-cell">02:00 PM</div>
+              <div class="time-cell">03:00 PM</div>
+              <div class="time-cell">04:00 PM</div>
+              <div class="time-cell">05:00 PM</div>
+              <div class="time-cell">06:00 PM</div>
+              <div class="time-cell">07:00 PM</div>
+              <div class="time-cell">08:00 PM</div>
+            </div>
+
+            <!-- MAR 09 MON -->
+            <div class="day-col">
+              <div class="evt" id="e1" onclick="showEventDetail('e1')">
+                <div class="evt-name">Product Sync</div>
+                <div class="evt-time">09:30 – 10:00 AM</div>
+              </div>
+              <div class="evt" id="e2" onclick="showEventDetail('e2')">
+                <div class="evt-name">StartUp</div>
+                <div class="evt-time">10:30 – 11:30 AM</div>
+              </div>
+              <div class="evt" id="e3" onclick="showEventDetail('e3')">
+                <div class="evt-name">1:1 Manager</div>
+                <div class="evt-time">12:00 – 01:00 PM</div>
+              </div>
+            </div>
+
+            <!-- MAR 10 TUE -->
+            <div class="day-col">
+              <div class="evt" id="e4" onclick="showEventDetail('e4')">
+                <div class="evt-name">Weekly Team Meeting</div>
+                <div class="evt-time">09:00 – 09:30 AM</div>
+              </div>
+              <div class="evt" id="e5" onclick="showEventDetail('e5')">
+                <div class="evt-name">Brainstorming Session</div>
+                <div class="evt-time">09:30 – 10:00 AM</div>
+              </div>
+              <div class="evt" id="e6" onclick="showEventDetail('e6')">
+                <div class="evt-name">Workshop</div>
+                <div class="evt-time">12:00 – 01:00 PM</div>
+              </div>
+              <div class="evt" id="e7" onclick="showEventDetail('e7')">
+                <div class="evt-name">Quarterly Financial Review</div>
+                <div class="evt-time">01:00 – 01:30 PM</div>
+              </div>
+            </div>
+
+            <!-- MAR 11 WED -->
+            <div class="day-col">
+              <div class="evt" id="e8" onclick="showEventDetail('e8')">
+                <div class="evt-name">Customer Feedback Analysis</div>
+                <div class="evt-time">11:00 AM – 12:00 PM</div>
+              </div>
+            </div>
+
+            <!-- MAR 12 THU -->
+            <div class="day-col">
+              <div class="evt" id="e9" onclick="showEventDetail('e9')">
+                <div class="evt-name">Sony (Sarah &amp; Shelley)</div>
+                <div class="evt-time">12:00 – 01:00 PM</div>
+              </div>
+            </div>
+
+            <!-- MAR 13 FRI — empty -->
+            <div class="day-col"></div>
+
+            <!-- MAR 14 SAT — empty -->
+            <div class="day-col"></div>
+
+            <!-- MAR 15 SUN — empty -->
+            <div class="day-col"></div>
+
+        </div><!-- /.cal-body -->
+
+      </div><!-- /.cal-grid-scroll -->
+    </div><!-- /.calendar-wrap -->
+
+  </div><!-- /.cal-main -->
+</div><!-- /#calendar-view -->
+
+<!-- ══════════════════════════════════════════════════════
+     ACTION DROPDOWN MENU
+     ══════════════════════════════════════════════════════ -->
+<div id="action-menu" class="action-menu">
+  <button class="action-menu-item" onclick="emailAction('reply')">Reply</button>
+  <button class="action-menu-item" onclick="emailAction('replyall')">Reply All</button>
+  <button class="action-menu-item" onclick="emailAction('forward')">Forward</button>
+  <div class="menu-sep"></div>
+  <button class="action-menu-item" onclick="emailAction('markread')">Mark as Read</button>
+  <button class="action-menu-item" onclick="emailAction('markunread')">Mark as Unread</button>
+  <button class="action-menu-item" onclick="emailAction('flag')">Flag / Unflag</button>
+  <div class="menu-sep"></div>
+  <button class="action-menu-item" onclick="emailAction('archive')">Archive</button>
+  <button class="action-menu-item danger" onclick="emailAction('delete')">Delete</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ADD NEW MEETING MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="meeting-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'meeting-modal')">
+  <div class="modal-box">
+    <div class="modal-title">New Meeting</div>
+    <div class="modal-field">
+      <label class="modal-label">Title</label>
+      <input type="text" class="modal-input" id="meet-title" placeholder="e.g. Product Sync">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Date</label>
+      <input type="date" class="modal-input" id="meet-date">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Time</label>
+      <input type="time" class="modal-input" id="meet-time">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Attendees</label>
+      <input type="text" class="modal-input" id="meet-attendees" placeholder="e.g. Sarah, Marcus">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Platform</label>
+      <select class="modal-input" id="meet-platform">
+        <option value="">Select platform…</option>
+        <option>Google Meet</option>
+        <option>Google Teams</option>
+        <option>Zoom</option>
+        <option>In Person</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('meeting-modal')">Cancel</button>
+      <button class="modal-submit" onclick="createMeeting()">Create Meeting</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CONNECT NEW TOOL MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="tool-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'tool-modal')">
+  <div class="modal-box">
+    <div class="modal-title">Connect New Tool</div>
+    <div class="modal-field">
+      <label class="modal-label">Tool Name</label>
+      <input type="text" class="modal-input" id="tool-name" placeholder="e.g. Slack">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Tool Type</label>
+      <select class="modal-input" id="tool-type">
+        <option value="">Select type…</option>
+        <option>Calendar</option>
+        <option>Email</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('tool-modal')">Cancel</button>
+      <button class="modal-submit" onclick="connectTool()">Connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     COMPOSE NEW EMAIL MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="compose-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'compose-modal')">
+  <div class="modal-box">
+    <div class="modal-title">New Email</div>
+    <div class="modal-field">
+      <label class="modal-label">To</label>
+      <input type="text" class="modal-input" id="comp-to" placeholder="recipient@example.com">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Subject</label>
+      <input type="text" class="modal-input" id="comp-subject" placeholder="Subject line">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Message</label>
+      <textarea class="modal-textarea" id="comp-body" placeholder="Type your message..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('compose-modal')">Cancel</button>
+      <button class="modal-submit" onclick="composeNewEmail()">Send Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     JOIN MEETING MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="join-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'join-modal')">
+  <div class="modal-box" style="text-align:center; max-width:360px;">
+    <div class="join-platform-icon" id="join-platform-icon">🎥</div>
+    <div class="join-msg">Opening <span id="join-platform-name">Platform</span>…</div>
+    <div class="join-sub">You are being transferred to your meeting.<br>The platform will open in a new tab.</div>
+    <button class="join-proceed-btn" onclick="confirmJoin()">Open Now</button>
+    <div style="margin-top:10px;">
+      <button class="modal-cancel" style="width:100%;justify-content:center;" onclick="closeModal('join-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CUSTOM DATE RANGE MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="custom-range-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'custom-range-modal')">
+  <div class="modal-box" style="max-width:360px;">
+    <div class="modal-title">Custom Date Range</div>
+    <div class="modal-field">
+      <label class="modal-label">From</label>
+      <input type="date" class="modal-input" id="range-from" value="2026-03-09">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">To</label>
+      <input type="date" class="modal-input" id="range-to" value="2026-03-15">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('custom-range-modal')">Cancel</button>
+      <button class="modal-submit" onclick="applyCustomRange()">Apply Range</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     EVENT DETAIL / RSVP MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="event-detail-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'event-detail-modal')">
+  <div class="modal-box">
+    <div class="modal-title" id="ed-title">Event Title</div>
+    <div class="ed-row">
+      <span class="ed-lbl">Time</span>
+      <span id="ed-time">—</span>
+    </div>
+    <div class="ed-row">
+      <span class="ed-lbl">Platform</span>
+      <span id="ed-platform">—</span>
+    </div>
+    <div class="ed-row">
+      <span class="ed-lbl">Location</span>
+      <span id="ed-location">—</span>
+    </div>
+    <div class="ed-row">
+      <span class="ed-lbl">Host</span>
+      <span id="ed-host">—</span>
+    </div>
+    <div class="ed-row">
+      <span class="ed-lbl">Attendees</span>
+      <div class="ed-av-row" id="ed-attendees"></div>
+    </div>
+    <div class="ed-row">
+      <span class="ed-lbl">Notes</span>
+      <span id="ed-notes" style="color:#6b7280;font-style:italic;">—</span>
+    </div>
+    <div class="rsvp-row">
+      <button class="rsvp-btn rsvp-accept" onclick="rsvpEvent('accept')">Accept ✓</button>
+      <button class="rsvp-btn rsvp-decline" onclick="rsvpEvent('decline')">Decline ✗</button>
+    </div>
+    <div class="rsvp-status" id="rsvp-status"></div>
+    <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;">
+      <button class="cancel-event-btn" onclick="cancelEvent()">Cancel Event</button>
+      <button class="modal-cancel" onclick="closeModal('event-detail-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     LOGOUT CONFIRMATION MODAL
+     ══════════════════════════════════════════════════════ -->
+<div id="logout-modal" class="modal-overlay" onclick="handleOverlayClick(event, 'logout-modal')">
+  <div class="modal-box" style="max-width:360px; text-align:center;">
+    <div style="font-size:32px; margin-bottom:8px;">👋</div>
+    <div class="modal-title" style="text-align:center;">Sign out?</div>
+    <p style="font-size:13px; color:#6b7280; margin:0 0 20px;">You'll need to log back in to access your dashboard.</p>
+    <div class="modal-actions" style="justify-content:center; gap:10px;">
+      <button class="modal-cancel" onclick="closeModal('logout-modal')">Cancel</button>
+      <button class="modal-submit" style="background:#ef4444;" onclick="confirmLogout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SETTINGS PANEL
+     ══════════════════════════════════════════════════════ -->
+<div id="settings-backdrop" onclick="closeSettings()"></div>
+<div id="settings-panel">
+  <div class="settings-header">
+    <span class="settings-title">Settings</span>
+    <button class="settings-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="settings-body">
+
+    <!-- Account -->
+    <div>
+      <div class="settings-section-title">Account</div>
+      <div class="settings-info-block">
+        <div class="settings-info-row">
+          <span class="settings-info-label">Name</span>
+          <span class="settings-info-val">Shalimar T.</span>
+        </div>
+        <div class="settings-info-row">
+          <span class="settings-info-label">Email</span>
+          <span class="settings-info-val">shalimar@company.com</span>
+        </div>
+        <div class="settings-info-row">
+          <span class="settings-info-label">Role</span>
+          <span class="settings-info-val">Product Designer</span>
+        </div>
+        <div class="settings-info-row">
+          <span class="settings-info-label">Plan</span>
+          <span class="settings-info-val" style="color:#253471;">Pro · Active</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div>
+      <div class="settings-section-title">Notifications</div>
+      <div class="settings-row">
+        <div class="toggle-wrap">
+          <div class="settings-row-label">Email notifications</div>
+          <div class="settings-row-sub">Receive alerts for new emails</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked onchange="showToast('Email notifications ' + (this.checked ? 'enabled' : 'disabled'))">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap">
+          <div class="settings-row-label">Calendar reminders</div>
+          <div class="settings-row-sub">15 min before meetings</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked onchange="showToast('Calendar reminders ' + (this.checked ? 'enabled' : 'disabled'))">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap">
+          <div class="settings-row-label">Weekly digest</div>
+          <div class="settings-row-sub">Summary every Monday</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" onchange="showToast('Weekly digest ' + (this.checked ? 'enabled' : 'disabled'))">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Appearance -->
+    <div>
+      <div class="settings-section-title">Appearance</div>
+      <div class="settings-row">
+        <div class="toggle-wrap">
+          <div class="settings-row-label">Dark mode</div>
+          <div class="settings-row-sub">Coming soon</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" disabled>
+          <span class="toggle-slider" style="opacity:0.4;cursor:not-allowed;"></span>
+        </label>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap">
+          <div class="settings-row-label">Compact view</div>
+          <div class="settings-row-sub">Reduce spacing in lists</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" onchange="showToast('Compact view ' + (this.checked ? 'on' : 'off'))">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Connected Tools -->
+    <div>
+      <div class="settings-section-title">Connected Tools</div>
+      <div class="settings-info-block">
+        <div class="settings-info-row">
+          <span class="settings-info-label">Gmail</span>
+          <span class="settings-info-val" style="color:#348a27;">● Connected</span>
+        </div>
+        <div class="settings-info-row">
+          <span class="settings-info-label">Outlook</span>
+          <span class="settings-info-val" style="color:#348a27;">● Connected</span>
+        </div>
+        <div class="settings-info-row">
+          <span class="settings-info-label">Google Calendar</span>
+          <span class="settings-info-val" style="color:#348a27;">● Connected</span>
+        </div>
+        <div class="settings-info-row">
+          <span class="settings-info-label">Zoom</span>
+          <span class="settings-info-val" style="color:#9da4b1;">○ Not connected</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="modal-submit" style="width:100%;justify-content:center;margin-top:4px;" onclick="showToast('Settings saved');closeSettings()">Save Changes</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     LOGIN SCREEN
+     ══════════════════════════════════════════════════════ -->
+<div id="login-screen" class="hidden">
+  <div class="login-box">
+    <div class="login-logo-row">
+      <img src="assets/logo-one-signal.svg" class="login-logo-img" alt="OneSignal">
+      <span class="login-brand">OneSignal</span>
+    </div>
+    <div class="login-heading">Welcome back</div>
+    <div class="login-sub">Sign in to your workspace</div>
+    <div class="login-field">
+      <label class="login-label">Email</label>
+      <input type="email" class="login-input" id="login-email" placeholder="you@company.com">
+    </div>
+    <div class="login-field">
+      <label class="login-label">Password</label>
+      <input type="password" class="login-input" id="login-password" placeholder="••••••••">
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>
