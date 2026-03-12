@@ -40,7 +40,3 @@ The prototype demonstrates UI interactions and workflow simulation using **HTML,
 - HTML  
 - CSS  
 - JavaScript  
-
----
-
-## Project Structure
