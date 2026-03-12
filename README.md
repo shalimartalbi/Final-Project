@@ -1,5 +1,4 @@
 # OneSignal Workspace Prototype
-**Project 4**
 
 ## Overview
 This project is an interactive front-end prototype for **OneSignal**, simulating a unified workspace that integrates **email and calendar management** into a single interface.
